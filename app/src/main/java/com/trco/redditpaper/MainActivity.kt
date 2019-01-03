@@ -1,24 +1,27 @@
 package com.trco.redditpaper
 
 import android.app.DownloadManager
+import android.app.WallpaperManager
 import android.content.Context
 import android.net.Uri
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat.getSystemService
 import android.util.Log
 import android.widget.TextView
 import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.BufferedReader
-import java.io.File
 import java.io.InputStream
-import java.net.URI
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"
+    val dlManager: DownloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    val wpManager: WallpaperManager = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         val srJSON = JSONObject(grabTask.get())
         var parseTask = ParseJSONTask().execute(srJSON)
 
-        var dlManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         var dlReq = DownloadManager.Request(Uri.parse("https://i.redd.it/l8mareg8l8821.jpg"))
         dlReq.setTitle("Example2!")
         dlReq.setDescription("Downloading")
@@ -92,6 +94,19 @@ class MainActivity : AppCompatActivity() {
                 imgURLs.add(url)
             }
             return imgURLs
+        }
+    }
+
+    private class SetWallpaperTask: AsyncTask<URL, Int, Int>() {
+        override fun onPostExecute(result: Int?) {
+            super.onPostExecute(result)
+        }
+
+        override fun doInBackground(vararg params: URL?): Int {
+            val urlConnection: HttpsURLConnection = params[0]?.openConnection() as HttpsURLConnection
+            try {
+                val inStream: InputStream = BufferedInputStream(urlConnection.inputStream)
+            }
         }
     }
 }
