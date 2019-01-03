@@ -1,5 +1,8 @@
 package com.trco.redditpaper
 
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,7 +11,9 @@ import android.widget.TextView
 import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.io.BufferedReader
+import java.io.File
 import java.io.InputStream
+import java.net.URI
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
@@ -22,6 +27,22 @@ class MainActivity : AppCompatActivity() {
         val grabTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog.json"))
         val srJSON = JSONObject(grabTask.get())
         var parseTask = ParseJSONTask().execute(srJSON)
+
+        var dlManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        var dlReq = DownloadManager.Request(Uri.parse("https://i.redd.it/l8mareg8l8821.jpg"))
+        dlReq.setTitle("Example2!")
+        dlReq.setDescription("Downloading")
+        dlReq.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        dlReq.setVisibleInDownloadsUi(true)
+        //dlReq.setDestinationUri("")
+        dlManager.enqueue(dlReq)
+
+        /*
+        for (url in parseTask.get()) {
+            var uri = Uri.parse(url.toURI().toString())
+            dlManager.enqueue(DownloadManager.Request(uri))
+        }
+        */
 
         val tv = findViewById<TextView>(R.id.mainText)
         tv.text = srJSON.toString()
