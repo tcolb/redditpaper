@@ -8,8 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
+import androidx.work.*
 import org.json.JSONObject
 import java.net.URL
 import java.util.concurrent.TimeUnit
@@ -22,9 +21,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // workmanager setting up recurring work
-        val wallpaperCycleBuilder = PeriodicWorkRequestBuilder<PaperWorker>(15, TimeUnit.MINUTES)
-        val wallpaperCycleWork = wallpaperCycleBuilder.build()
-        WorkManager.getInstance().enqueue(wallpaperCycleWork)
+        val wallpaperCycleConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val wallpaperCycleBuild =
+            PeriodicWorkRequestBuilder<PaperWorker>(15, TimeUnit.MINUTES)
+                .setConstraints(wallpaperCycleConstraints)
+                .addTag("paperCycle")
+                .build()
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            "RedditPaperCycle",
+            ExistingPeriodicWorkPolicy.KEEP,
+            wallpaperCycleBuild)
 
         //val dlManager: DownloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val wpManager: WallpaperManager = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
@@ -57,6 +65,6 @@ class MainActivity : AppCompatActivity() {
         val iv = findViewById<ImageView>(R.id.testImage)
         iv.setImageBitmap(bmpTask.get())
 
-        wpManager.setBitmap(bmpTask.get())
+        //wpManager.setBitmap(bmpTask.get())
     }
 }

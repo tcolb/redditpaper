@@ -7,6 +7,8 @@ import androidx.work.WorkerParameters
 import java.net.URL
 
 class PaperWorker(context: Context, params: WorkerParameters): Worker(context, params) {
+    val TAG = "PaperWorker"
+
     override fun doWork(): Result {
         val wpManager: WallpaperManager = applicationContext.getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
 
