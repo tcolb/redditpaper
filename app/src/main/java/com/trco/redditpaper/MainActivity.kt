@@ -4,7 +4,7 @@ import android.app.DownloadManager
 import android.app.WallpaperManager
 import android.content.Context
 import android.content.res.AssetManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // workmanager setting up recurring work
+        // WorkManager setting up recurring work
         val wallpaperCycleConstraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
@@ -35,16 +35,16 @@ class MainActivity : AppCompatActivity() {
             wallpaperCycleBuild)
 
         //val dlManager: DownloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val wpManager: WallpaperManager = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
+        //val wpManager: WallpaperManager = getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
 
 
-        val grabTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog.json"))
-        val srJSON = JSONObject(grabTask.get())
-        var parseTask = ParseJSONTask().execute(srJSON)
-        val bmpTask = UrlBitmapTask().execute(URL("https://i.redd.it/l8mareg8l8821.jpg"))
+        //val grabTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog.json"))
+        //val srJSON = JSONObject(grabTask.get())
+        //var parseTask = ParseJSONTask().execute(srJSON)
+        //val bmpTask = UrlBitmapTask().execute(URL(parseTask.get()[0]))
 
 
-        /*
+        /* Snippet for download manager, maybe used later
         var dlReq = DownloadManager.Request(Uri.parse("https://i.redd.it/l8mareg8l8821.jpg"))
         dlReq.setTitle("Example2!")
         dlReq.setDescription("Downloading")
@@ -52,19 +52,10 @@ class MainActivity : AppCompatActivity() {
         dlReq.setVisibleInDownloadsUi(true)
         dlReq.setDestinationUri("")
         dlManager.enqueue(dlReq)
-
-
-        for (url in parseTask.get()) {
-            var uri = Uri.parse(url.toURI().toString())
-            dlManager.enqueue(DownloadManager.Request(uri))
-        }
         */
 
-        //val tv = findViewById<TextView>(R.id.testText)
-        //tv.text = srJSON.toString()
-        val iv = findViewById<ImageView>(R.id.testImage)
-        iv.setImageBitmap(bmpTask.get())
+        //val iv = findViewById<ImageView>(R.id.testImage)
+        //iv.setImageBitmap(bmpTask.get())
 
-        //wpManager.setBitmap(bmpTask.get())
     }
 }

@@ -35,25 +35,25 @@ class FetchSubredditTask : AsyncTask<URL, Int, String>() {
     }
 }
 
-class ParseJSONTask: AsyncTask<JSONObject, Int, ArrayList<URL>>() {
+class ParseJSONTask: AsyncTask<JSONObject, Int, ArrayList<String>>() {
     val TAG = "ParseJSONTask"
 
-    override fun onPostExecute(result: ArrayList<URL>?) {
+    override fun onPostExecute(result: ArrayList<String>?) {
         Log.v(TAG, "finished parsing reddit JSONObject")
         super.onPostExecute(result)
     }
 
-    override fun doInBackground(vararg params: JSONObject): ArrayList<URL> {
-        val imgURLs = arrayListOf<URL>()
+    override fun doInBackground(vararg params: JSONObject): ArrayList<String> {
+        val imgURLs = arrayListOf<String>()
 
         val data = params[0].getJSONObject("data")
         val posts = data.getJSONArray("children")
         for (i in 1..(posts.length()-1)) {
             val post: JSONObject = posts.get(i) as JSONObject
             val postData = post.getJSONObject("data")
-            val url = URL(postData.getString("url"))
-            Log.v(TAG, "got url: " + url.toString())
-            imgURLs.add(url)
+            val strUrl = postData.getString("url")
+            Log.v(TAG, "got url: " + strUrl)
+            imgURLs.add(strUrl)
         }
         return imgURLs
     }
