@@ -1,21 +1,12 @@
 package com.trco.redditpaper
 
-import android.app.DownloadManager
-import android.app.WallpaperManager
-import android.content.Context
 import android.content.Intent
-import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.work.*
-import org.json.JSONObject
-import java.net.URL
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
