@@ -24,7 +24,7 @@ class PaperWorker(context: Context, params: WorkerParameters): Worker(context, p
         Log.v(TAG, "num posts in db: " + dbDao.numPosts())
         //TODO while or if?
         while (dbDao.numPosts() == 0) {
-            val fetchTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog/top.json"))
+            val fetchTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog.json"))
             val parseJSONTask = ParseJSONTask().execute(JSONObject(fetchTask.get().result))
             if (fetchTask.get().error != null || parseJSONTask.get().error != null) {
                 // parsing json failed
@@ -47,7 +47,15 @@ class PaperWorker(context: Context, params: WorkerParameters): Worker(context, p
             db.close()
             return Result.failure()
         }
+
         // set wallpaper as next url
+        if (bmpTask.get().result == null) {
+            Log.e(TAG, "bitmap invalid, probably a non image link")
+            dbDao.deletePost(fetchedPost)
+            db.close()
+            return Result.retry()
+        }
+
         wpManager.setBitmap(bmpTask.get().result)
         dbDao.deletePost(fetchedPost)
         db.close()

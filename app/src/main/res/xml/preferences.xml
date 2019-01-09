@@ -1,6 +1,11 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-
+    <EditTextPreference
+            android:defaultValue="pics"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="Subreddit" android:key="edit_text_preference_2"/>
     <SwitchPreference
             android:defaultValue="false"
             android:title="Download images" android:key="switch_preference_1"/>
@@ -11,6 +16,7 @@
             android:title="Posts per fetch" android:key="edit_text_preference_1" android:inputType="number"/>
     <ListPreference
             android:defaultValue="1"
-            android:title="Order posts by" android:entries="@array/pref_sort_by_query_subreddit"
+            android:title="Order posts by"
+            android:entries="@array/pref_sort_by_query_subreddit"
             android:entryValues="@array/pref_sort_by_query_subreddit" android:key="list_preference_1"/>
 </PreferenceScreen>
