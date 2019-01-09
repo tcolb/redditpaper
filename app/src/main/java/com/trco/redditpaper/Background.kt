@@ -22,23 +22,35 @@ class PaperWorker(context: Context, params: WorkerParameters): Worker(context, p
         ).build()
         val dbDao = db.postDao()
         Log.v(TAG, "num posts in db: " + dbDao.numPosts())
-        if (dbDao.numPosts() == 0) {
+        //TODO while or if?
+        while (dbDao.numPosts() == 0) {
             val fetchTask = FetchSubredditTask().execute(URL("https://www.reddit.com/r/analog/top.json"))
-            val parseJSONTask = ParseJSONTask().execute(JSONObject(fetchTask.get()))
-            for (post in parseJSONTask.get()) {
-                val newPost = Post(post)
+            val parseJSONTask = ParseJSONTask().execute(JSONObject(fetchTask.get().result))
+            if (fetchTask.get().error != null || parseJSONTask.get().error != null) {
+                // parsing json failed
+                db.close()
+                return Result.failure()
+            }
+            parseJSONTask.get().result?.forEach {
+                val newPost = Post(it)
                 dbDao.insertPost(newPost)
-                Log.v(TAG, "inserted post url into database, url:" + post)
+                Log.v(TAG, "inserted post url into database, url: $it")
             }
         }
 
         // get bitmap of next url in queue
         val fetchedPost = dbDao.getNextPost()
-        Log.v(TAG, "accessed post from database, url: " + fetchedPost.postUrl)
+        Log.v(TAG, "accessed post from database, url: $" + fetchedPost.postUrl)
         val bmpTask = UrlBitmapTask().execute(URL(fetchedPost.postUrl))
+        if (bmpTask.get().error != null) {
+            // creating bitmap failed
+            db.close()
+            return Result.failure()
+        }
         // set wallpaper as next url
-        wpManager.setBitmap(bmpTask.get())
+        wpManager.setBitmap(bmpTask.get().result)
         dbDao.deletePost(fetchedPost)
+        db.close()
 
         return Result.success()
     }
