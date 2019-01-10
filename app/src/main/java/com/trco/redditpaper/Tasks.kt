@@ -36,6 +36,7 @@ class FetchSubredditTask : AsyncTask<URL, Int, AsyncTaskResult<String>>() {
 
     override fun doInBackground(vararg params: URL?): AsyncTaskResult<String> {
         var result: AsyncTaskResult<String>
+        Log.v(TAG,"fetching posts from subreddit url: " + params[0])
         val urlConnection: HttpsURLConnection = params[0]?.openConnection() as HttpsURLConnection
         try {
             val inStream: InputStream = BufferedInputStream(urlConnection.inputStream) as InputStream
@@ -93,6 +94,7 @@ class UrlBitmapTask: AsyncTask<URL, Int, AsyncTaskResult<Bitmap>>() {
     }
 
     override fun doInBackground(vararg params: URL?): AsyncTaskResult<Bitmap> {
+        //TODO check for https , will throw cast exception otherwise
         var result: AsyncTaskResult<Bitmap>
         val urlConnection: HttpsURLConnection = params[0]?.openConnection() as HttpsURLConnection
         try {

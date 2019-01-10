@@ -5,18 +5,23 @@
             android:defaultValue="pics"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Subreddit" android:key="edit_text_preference_2"/>
+            android:title="Subreddit"
+            android:key="setting_subreddit_name"/>
     <SwitchPreference
             android:defaultValue="false"
-            android:title="Download images" android:key="switch_preference_1"/>
+            android:title="Download images"
+            android:key="setting_download_pictures"/>
     <EditTextPreference
             android:defaultValue="25"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="Posts per fetch" android:key="edit_text_preference_1" android:inputType="number"/>
+            android:title="Posts per fetch"
+            android:key="setting_number_posts_fetched"
+            android:inputType="number"/>
     <ListPreference
-            android:defaultValue="1"
+            android:defaultValue="hot"
             android:title="Order posts by"
             android:entries="@array/pref_sort_by_query_subreddit"
-            android:entryValues="@array/pref_sort_by_query_subreddit" android:key="list_preference_1"/>
+            android:entryValues="@array/pref_sort_by_query_subreddit"
+            android:key="setting_post_ordering"/>
 </PreferenceScreen>

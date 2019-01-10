@@ -2,9 +2,11 @@
 <resources>
     <integer-array name="pref_posts_per_query_subreddit">1, 5, 10, 25, 50, 100</integer-array>
     <string-array name="pref_sort_by_query_subreddit">
-        <item>popular</item>,
+        <item>hot</item>
+        <item>top</item>,
         <item>new</item>,
-        <item>gold</item>,
-        <item>default</item>
+        <item>rising</item>,
+        <item>controversial</item>
+        <item>gilded</item>
     </string-array>
 </resources>
